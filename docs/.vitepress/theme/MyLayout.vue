@@ -17,7 +17,7 @@ const { Layout } = DefaultTheme
       <div class="notfound">
         <div class="icon">404</div>
         <div class="link">
-          <a href="/perryts-cn">返回首页</a>
+          <a href="/">返回首页</a>
         </div>
       </div>
     </template>
