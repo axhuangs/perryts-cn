@@ -120,6 +120,3 @@ perry --version
 
 - [构建原生应用](first-app)
 
----
-
-> （注：文档部分内容由 AI 翻译）
