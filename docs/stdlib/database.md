@@ -1,6 +1,6 @@
 # 数据库
 
-Perry 原生实现了 MySQL、PostgreSQL、SQLite、MongoDB 和 Redis 的客户端。
+Perry 原生实现了适用于 MySQL、PostgreSQL、SQLite、MongoDB 和 Redis 的客户端。
 
 ## MySQL
 
@@ -94,7 +94,7 @@ await redis.del("key");
 await redis.quit();
 ```
 
-## 下一步
+## 后续参考
 
-- [Cryptography](crypto.md)
-- [Overview](overview.md) — All stdlib modules
+- [Cryptography](crypto)
+- [标准库概述](overview) — 所有标准库模块

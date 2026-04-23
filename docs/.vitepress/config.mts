@@ -91,7 +91,7 @@ export default defineConfig({
         items: [
           { text: '标准库概述', link: '/stdlib/overview.html' },
           { text: 'File System(文件系统)', link: '/stdlib/fs.html' },
-          { text: 'HTTP & Networking', link: '/stdlib/http.html' },
+          { text: 'HTTP & Networking(HTTP & 网络)', link: '/stdlib/http.html' },
           { text: 'Databases(数据库)', link: '/stdlib/database.html' },
           { text: 'Cryptography(加密)', link: '/stdlib/crypto.html' },
           { text: 'Utilities(实用工具)', link: '/stdlib/utilities.html' },

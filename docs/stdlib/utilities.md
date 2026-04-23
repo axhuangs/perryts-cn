@@ -1,6 +1,6 @@
-# 工具
+# 工具类库
 
-Perry 原生实现了常见的工具包。
+Perry 原生实现了常用的工具类包。
 
 ## lodash
 
@@ -56,8 +56,8 @@ console.log(id); // e.g., "550e8400-e29b-41d4-a716-446655440000"
 ```typescript
 import { nanoid } from "nanoid";
 
-const id = nanoid();       // Default 21 chars
-const short = nanoid(10);  // Custom length
+const id = nanoid();       // 默认生成21个字符
+const short = nanoid(10);  // 自定义长度
 console.log(id);
 ```
 
@@ -81,7 +81,7 @@ validator.isUUID(id);                   // true
 validator.isEmpty("");                  // true
 ```
 
-## 下一步
+## 后续参考
 
-- [Other Modules](other.md)
-- [Overview](overview.md) — All stdlib modules
+- [Other Modules](other)
+- [标准库概述](overview) — 所有标准库模块

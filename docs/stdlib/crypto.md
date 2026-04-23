@@ -1,6 +1,6 @@
 # 密码学
 
-Perry 原生实现了密码哈希、JWT 令牌和以太坊密码学。
+Perry 原生实现了密码哈希、JWT 令牌以及以太坊密码学相关功能。
 
 ## bcrypt
 
@@ -22,14 +22,14 @@ const valid = await argon2.verify(hash, "mypassword");
 console.log(valid); // true
 ```
 
-## JSON Web Tokens
+## JSON Web 令牌
 
 ```typescript
 import jwt from "jsonwebtoken";
 
 const secret = "my-secret-key";
 
-// 签名令牌
+// 签发令牌
 const token = jwt.sign({ userId: 123, role: "admin" }, secret, {
   expiresIn: "1h",
 });
@@ -39,22 +39,22 @@ const decoded = jwt.verify(token, secret);
 console.log(decoded.userId); // 123
 ```
 
-## Node.js Crypto
+## Node.js 加密模块
 
 ```typescript
 import crypto from "crypto";
 
-// 哈希
+// 哈希运算
 const hash = crypto.createHash("sha256").update("data").digest("hex");
 
-// HMAC
+// HMAC 运算
 const hmac = crypto.createHmac("sha256", "secret").update("data").digest("hex");
 
-// 随机字节
+// 生成随机字节
 const bytes = crypto.randomBytes(32);
 ```
 
-## Ethers
+## Ethers 库
 
 ```typescript
 import { ethers } from "ethers";
@@ -63,11 +63,11 @@ import { ethers } from "ethers";
 const wallet = ethers.Wallet.createRandom();
 console.log(wallet.address);
 
-// 签名消息
+// 对消息进行签名
 const signature = await wallet.signMessage("Hello, Ethereum!");
 ```
 
-## 下一步
+## 后续参考
 
-- [Utilities](utilities.md)
-- [Overview](overview.md) — All stdlib modules
+- [Utilities](utilities)
+- [标准库概述](overview) — 所有标准库模块

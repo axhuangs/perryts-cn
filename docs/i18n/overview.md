@@ -1,24 +1,24 @@
-# 国际化 (i18n)
+# 国际化（i18n）
 
-Perry 的 i18n 系统让您编写自然的英语字符串，并在编译时自动翻译它们。零仪式，近零运行时成本。
+Perry 的国际化（i18n）系统支持开发者编写自然的英文字符串，并在编译阶段自动完成翻译。实现零接入成本、接近零的运行时开销。
 
 ```typescript
 import { Button, Text } from "perry/ui";
 
 Button("Next")                              // 自动本地化
-Text("Hello, {name}!", { name: user.name }) // 带插值
+Text("Hello, {name}!", { name: user.name }) // 支持插值替换
 ```
 
 ## 设计原则
 
-- **零仪式**：UI 组件中的字符串字面量自动可本地化键
-- **编译时验证**：构建期间捕获缺失翻译、参数不匹配和复数形式错误
-- **嵌入式字符串表**：所有翻译作为平面 2D 表烘焙到二进制文件中。近零运行时查找成本
-- **平台原生区域设置检测**：在每个平台上使用 OS API（移动端不需要 env var）
+- **零接入成本**：UI 组件中的字符串字面量自动作为可本地化的键值
+- **编译时校验**：构建阶段即可捕获缺失的翻译、参数不匹配、复数形式错误等问题
+- **嵌入式字符串表**：所有翻译内容以二维扁平表形式嵌入二进制文件，运行时查找开销接近零
+- **平台原生区域设置检测**：全平台均调用操作系统 API（移动端无需环境变量）
 
 ## 快速开始
 
-### 1. 将 i18n 配置添加到 perry.toml
+### 1. 向 perry.toml 添加 i18n 配置
 
 ```toml
 [i18n]
@@ -32,7 +32,7 @@ default_locale = "en"
 perry i18n extract src/main.ts
 ```
 
-这会扫描您的源文件并创建 `locales/en.json` 和 `locales/de.json`：
+该命令会扫描源文件并生成 `locales/en.json` 和 `locales/de.json` 文件：
 
 ```json
 // locales/en.json
@@ -41,16 +41,16 @@ perry i18n extract src/main.ts
   "Back": "Back"
 }
 
-// locales/de.json (空值 = 需要翻译)
+// locales/de.json（空值表示待翻译）
 {
   "Next": "",
   "Back": ""
 }
 ```
 
-### 3. 翻译
+### 3. 完成翻译
 
-填写 `locales/de.json`：
+填充 `locales/de.json` 文件内容：
 
 ```json
 {
@@ -59,41 +59,45 @@ perry i18n extract src/main.ts
 }
 ```
 
-### 4. 构建
+### 4. 构建项目
 
 ```bash
 perry compile src/main.ts -o myapp
 ```
 
-Perry 在编译时验证所有翻译并将它们烘焙到二进制文件中。在运行时，应用检测用户的系统区域设置并显示正确的语言。
+Perry 会在编译阶段校验所有翻译内容，并将其嵌入二进制文件。应用运行时会自动检测用户的系统区域设置，展示对应语言的内容。
 
 ## 工作原理
 
-1. **检测**：UI 组件调用（`Button`、`Text`、`Label` 等）中的字符串字面量自动被视为 i18n 键
-2. **转换**：编译器将 `Expr::String("Next")` 替换为 `Expr::I18nString { key: "Next", string_idx: 0 }` 在 HIR 中
-3. **代码生成**：对于每个 `I18nString`，编译器发出一个区域设置分支，在运行时选择正确的翻译
-4. **区域设置检测**：启动时，`perry_i18n_init()` 通过原生 API 检测系统区域设置并设置全局区域设置索引
+1. **检测阶段**：UI 组件调用（`Button`、`Text`、`Label` 等）中的字符串字面量自动被识别为国际化键值
+2. **转换阶段**：编译器会将抽象语法树（HIR）中的 `Expr::String("Next")` 替换为 `Expr::I18nString { key: "Next", string_idx: 0 }`
+3. **代码生成阶段**：针对每个 `I18nString`，编译器会生成区域设置分支逻辑，在运行时选择正确的翻译内容
+4. **区域设置检测**：启动阶段，`perry_i18n_init()` 通过原生 API 检测系统区域设置，并设置全局区域设置索引
 
 ## 区域设置检测
 
-| 平台 | 方法 |
-|----------|--------|
-| macOS | `CFLocaleCopyCurrent()` (CoreFoundation) |
-| iOS | `CFLocaleCopyCurrent()` (CoreFoundation) |
-| Android | `__system_property_get("persist.sys.locale")` |
-| Windows | `GetUserDefaultLocaleName()` (Win32) |
-| Linux | `LANG` / `LC_ALL` / `LC_MESSAGES` env vars |
+| 平台      | 实现方式 |
+|-----------|----------|
+| macOS     | `CFLocaleCopyCurrent()`（CoreFoundation） |
+| iOS       | `CFLocaleCopyCurrent()`（CoreFoundation） |
+| Android   | `__system_property_get("persist.sys.locale")` |
+| Windows   | `GetUserDefaultLocaleName()`（Win32） |
+| Linux     | `LANG` / `LC_ALL` / `LC_MESSAGES` 环境变量 |
 
-检测到的区域设置与您配置的区域设置进行模糊匹配：`de_DE.UTF-8` 匹配 `de`，`en-US` 匹配 `en`，等等。
+检测到的区域设置会与配置的区域列表进行模糊匹配：`de_DE.UTF-8` 匹配 `de`、`en-US` 匹配 `en` 等。
 
 ## 平台输出
 
-为移动目标编译时，Perry 在二进制文件旁边生成平台原生区域设置资源：
+编译移动端目标时，Perry 会在二进制文件旁生成平台原生的区域设置资源文件：
 
-| 平台 | 输出 |
-|----------|--------|
-| iOS/macOS | `{locale}.lproj/Localizable.strings` 在 `.app` 包内 |
-| Android | `res/values-{locale}/strings.xml` |
-| 桌面 | 字符串嵌入二进制文件（无额外文件） |
+| 平台      | 输出内容 |
+|-----------|----------|
+| iOS/macOS | `.app` 包内的 `{locale}.lproj/Localizable.strings` 文件 |
+| Android   | `res/values-{locale}/strings.xml` 文件 |
+| 桌面端    | 字符串直接嵌入二进制文件（无额外文件） |
 
-## 下一步
+## 后续参考
+
+- [Interpolation & Plurals](interpolation) — 插值与复数
+- [格式化](formatting)
+- [命令行工具](cli)

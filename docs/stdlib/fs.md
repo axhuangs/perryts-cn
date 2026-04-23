@@ -1,6 +1,6 @@
 # 文件系统
 
-Perry 实现了 Node.js 文件系统 API，用于读取、写入和管理文件。
+Perry 实现了 Node.js 文件系统相关的 API，用于文件的读取、写入及管理操作。
 
 ## 读取文件
 
@@ -20,7 +20,7 @@ const buffer = readFileBuffer("image.png");
 console.log(`Read ${buffer.length} bytes`);
 ```
 
-`readFileBuffer` 将文件读取为二进制数据（内部使用 `fs::read()`，而不是 `read_to_string()`）。
+`readFileBuffer` 以二进制数据形式读取文件（内部调用 `fs::read()` 而非 `read_to_string()`）。
 
 ## 写入文件
 
@@ -57,7 +57,7 @@ for (const file of files) {
 }
 
 // 递归删除目录
-rmRecursive("output"); // 使用 fs::remove_dir_all
+rmRecursive("output"); // 调用 fs::remove_dir_all 实现
 ```
 
 ## 路径工具
@@ -72,7 +72,7 @@ const name = basename(configPath);        // "config.json"
 const abs = resolve("relative/path");     // 绝对路径
 ```
 
-## 下一步
+## 后续参考
 
-- [HTTP & Networking](http.md)
-- [Overview](overview.md) — All stdlib modules
+- [HTTP & Networking](http)
+- [标准库概述](overview) — 所有标准库模块

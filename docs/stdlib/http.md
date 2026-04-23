@@ -1,6 +1,6 @@
-# HTTP & Networking
+# HTTP & 网络
 
-Perry 原生实现了 HTTP 服务器、客户端和 WebSocket 支持。
+Perry 原生实现了 HTTP 服务器、客户端以及 WebSocket 支持。
 
 ## Fastify 服务器
 
@@ -29,16 +29,16 @@ app.listen({ port: 3000 }, () => {
 });
 ```
 
-Perry 的 Fastify 实现与 npm 包 API 兼容。路由、请求/回复对象、参数、查询字符串和 JSON 正文解析都有效。
+Perry 的 Fastify 实现与 npm 包的 API 兼容。路由、request/reply 对象、参数、查询字符串以及 JSON 体解析均能正常工作。
 
 ## Fetch API
 
 ```typescript
-// GET 请求
+// GET request
 const response = await fetch("https://jsonplaceholder.typicode.com/posts/1");
 const data = await response.json();
 
-// POST 请求
+// POST request
 const result = await fetch("https://jsonplaceholder.typicode.com/posts", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -79,7 +79,7 @@ ws.on("close", () => {
 });
 ```
 
-## 下一步
+## 后续参考
 
-- [Databases](database.md)
-- [Overview](overview.md) — All stdlib modules
+- [Databases](database)
+- [Overview](overview) — 所有标准库模块
