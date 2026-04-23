@@ -1,9 +1,7 @@
-# 支持的 TypeScript 功能
-
-Perry 将 TypeScript 的实用子集编译为原生代码。本页列出了支持的内容。
+# 支持的 TypeScript 特性
+Perry 会将 TypeScript 的实用子集编译为原生代码。本文档列出当前支持的所有特性。
 
 ## 原始类型
-
 ```typescript
 const n: number = 42;
 const s: string = "hello";
@@ -11,21 +9,17 @@ const b: boolean = true;
 const u: undefined = undefined;
 const nl: null = null;
 ```
+所有原始类型在运行时均以 **64 位 NaN 装箱值** 表示。
 
-所有原始类型在运行时表示为 64 位 NaN-boxed 值。
-
-## 变量和常量
-
+## 变量与常量
 ```typescript
 let x = 10;
 const y = "immutable";
-var z = true; // var 支持但首选 let/const
+var z = true; // 支持 var，但推荐使用 let/const
 ```
-
-Perry 从初始化器推断类型 — `let x = 5` 被推断为 `number`，无需显式注解。
+Perry 会从初始化表达式自动推导类型 —— `let x = 5` 无需显式注解即可被推断为 `number`。
 
 ## 函数
-
 ```typescript
 function add(a: number, b: number): number {
   return a + b;
@@ -46,15 +40,12 @@ const double = (x: number) => x * 2;
 ```
 
 ## 类
-
 ```typescript
 class Animal {
   name: string;
-
   constructor(name: string) {
     this.name = name;
   }
-
   speak(): string {
     return `${this.name} makes a noise`;
   }
@@ -79,18 +70,16 @@ class Counter {
   }
 }
 ```
-
-支持的类功能：
+支持的类特性：
 - 构造函数
-- 实例和静态方法
-- 实例和静态属性
-- 继承 (`extends`)
-- 方法覆盖
-- `instanceof` 检查（通过类 ID 链）
-- 单例模式（静态方法返回类型推断）
+- 实例方法 / 静态方法
+- 实例属性 / 静态属性
+- 继承（`extends`）
+- 方法重写
+- `instanceof` 判断（基于类 ID 链）
+- 单例模式（静态方法返回值类型推导）
 
 ## 枚举
-
 ```typescript
 // 数字枚举
 enum Direction {
@@ -110,11 +99,9 @@ enum Color {
 const dir = Direction.Up;
 const color = Color.Red;
 ```
+枚举会被编译为常量，支持跨模块使用。
 
-枚举被编译为常量，并在模块间工作。
-
-## 接口和类型别名
-
+## 接口与类型别名
 ```typescript
 interface User {
   name: string;
@@ -126,11 +113,9 @@ type Point = { x: number; y: number };
 type StringOrNumber = string | number;
 type Callback = (value: number) => void;
 ```
-
-接口和类型别名在编译时被擦除（像 `tsc`）。它们仅用于文档和编辑器工具。
+接口与类型别名会在编译时被擦除（与 `tsc` 一致），仅用于文档与编辑器工具提示。
 
 ## 数组
-
 ```typescript
 const nums: number[] = [1, 2, 3];
 
@@ -162,14 +147,13 @@ const arr = Array.from(someIterable);
 // Array.isArray
 if (Array.isArray(value)) { /* ... */ }
 
-// for...of 迭代
+// for...of 遍历
 for (const item of nums) {
   console.log(item);
 }
 ```
 
 ## 对象
-
 ```typescript
 const obj = { name: "Perry", version: 1 };
 obj.name = "Perry 2";
@@ -178,7 +162,7 @@ obj.name = "Perry 2";
 const key = "name";
 const val = obj[key];
 
-// Object.keys, Object.values, Object.entries
+// Object.keys / values / entries
 const keys = Object.keys(obj);
 const values = Object.values(obj);
 const entries = Object.entries(obj);
@@ -186,12 +170,11 @@ const entries = Object.entries(obj);
 // 展开
 const copy = { ...obj, extra: true };
 
-// delete
+// 删除属性
 delete obj[key];
 ```
 
 ## 解构
-
 ```typescript
 // 数组解构
 const [a, b, ...rest] = [1, 2, 3, 4, 5];
@@ -211,8 +194,7 @@ function process({ name, age }: User) {
 }
 ```
 
-## 模板字面量
-
+## 模板字符串
 ```typescript
 const name = "world";
 const greeting = `Hello, ${name}!`;
@@ -223,8 +205,7 @@ const multiline = `
 const expr = `Result: ${1 + 2}`;
 ```
 
-## 展开和剩余
-
+## 展开与剩余
 ```typescript
 // 数组展开
 const combined = [...arr1, ...arr2];
@@ -237,7 +218,6 @@ function log(...args: any[]) { /* ... */ }
 ```
 
 ## 闭包
-
 ```typescript
 function makeCounter() {
   let count = 0;
@@ -251,25 +231,21 @@ const counter = makeCounter();
 counter.increment();
 console.log(counter.get()); // 1
 ```
+Perry 会执行**闭包转换**，被捕获的变量会存储在堆分配的闭包对象中。
 
-Perry 执行闭包转换 — 捕获的变量存储在堆分配的闭包对象中。
-
-## Async/Await
-
+## 异步/等待
 ```typescript
 async function fetchUser(id: number): Promise<User> {
   const response = await fetch(`/api/users/${id}`);
   return await response.json();
 }
 
-// 顶级 await
+// 顶层 await
 const data = await fetchUser(1);
 ```
+Perry 将异步函数编译为基于 Tokio 异步运行时的状态机。
 
-Perry 将异步函数编译为由 Tokio 的异步运行时支持的状态机。
-
-## Promises
-
+## Promise
 ```typescript
 const p = new Promise<number>((resolve, reject) => {
   resolve(42);
@@ -282,7 +258,6 @@ const results = await Promise.all([fetch(url1), fetch(url2)]);
 ```
 
 ## 生成器
-
 ```typescript
 function* range(start: number, end: number) {
   for (let i = start; i < end; i++) {
@@ -295,8 +270,7 @@ for (const n of range(0, 10)) {
 }
 ```
 
-## Map 和 Set
-
+## Map 与 Set
 ```typescript
 const map = new Map<string, number>();
 map.set("a", 1);
@@ -313,7 +287,6 @@ set.size;
 ```
 
 ## 正则表达式
-
 ```typescript
 const re = /hello\s+(\w+)/;
 const match = "hello world".match(re);
@@ -326,7 +299,6 @@ const replaced = "hello world".replace(/world/, "perry");
 ```
 
 ## 错误处理
-
 ```typescript
 try {
   throw new Error("something went wrong");
@@ -338,15 +310,13 @@ try {
 ```
 
 ## JSON
-
 ```typescript
 const obj = JSON.parse('{"key": "value"}');
 const str = JSON.stringify(obj);
 const pretty = JSON.stringify(obj, null, 2);
 ```
 
-## typeof 和 instanceof
-
+## typeof 与 instanceof
 ```typescript
 if (typeof x === "string") {
   console.log(x.length);
@@ -356,13 +326,11 @@ if (obj instanceof Dog) {
   obj.speak();
 }
 ```
-
-`typeof` 在运行时检查 NaN-boxing 标签。`instanceof` 遍历类 ID 链。
+`typeof` 在运行时检查 NaN 装箱标签；`instanceof` 遍历类 ID 链进行判断。
 
 ## 模块
-
 ```typescript
-// 命名导出
+// 具名导出
 export function helper() { /* ... */ }
 export const VALUE = 42;
 
@@ -373,12 +341,11 @@ export default class MyClass { /* ... */ }
 import MyClass, { helper, VALUE } from "./module";
 import * as utils from "./utils";
 
-// 重新导出
+// 重导出
 export { helper } from "./module";
 ```
 
 ## BigInt
-
 ```typescript
 const big = BigInt(9007199254740991);
 const result = big + BigInt(1);
@@ -393,7 +360,6 @@ const not = ~big;
 ```
 
 ## 字符串方法
-
 ```typescript
 const s = "Hello, World!";
 s.length;
@@ -415,7 +381,6 @@ s.padEnd(20);
 ```
 
 ## Math
-
 ```typescript
 Math.floor(3.7);
 Math.ceil(3.2);
@@ -434,7 +399,6 @@ Math.cos(0);
 ```
 
 ## Date
-
 ```typescript
 const now = Date.now();
 const d = new Date();
@@ -442,8 +406,7 @@ d.getTime();
 d.toISOString();
 ```
 
-## Console
-
+## 控制台
 ```typescript
 console.log("message");
 console.error("error");
@@ -453,19 +416,14 @@ console.timeEnd("label");
 ```
 
 ## 垃圾回收
-
-Perry 包含一个标记-清除垃圾回收器。当检测到内存压力时（~8MB 竞技场块），它会自动运行，但您也可以手动触发：
-
+Perry 内置**标记-清除垃圾回收器**。检测到内存压力（约 8MB 内存块）时自动触发，也可手动调用：
 ```typescript
 gc(); // 显式垃圾回收
 ```
-
-GC 使用保守的栈扫描来查找根，并支持竞技场分配的对象（数组、对象）和 malloc 分配的对象（字符串、闭包、promises、BigInts、错误）。
+GC 使用**保守式栈扫描**寻找根对象，支持内存池分配对象（数组、对象）与 malloc 分配对象（字符串、闭包、Promise、BigInt、错误对象）。
 
 ## JSX/TSX
-
 Perry 支持 JSX 语法用于 UI 组件组合：
-
 ```typescript
 // 组件函数
 function Greeting({ name }: { name: string }) {
@@ -487,10 +445,11 @@ function Greeting({ name }: { name: string }) {
 // 条件渲染
 {condition ? <Text>Yes</Text> : <Text>No</Text>}
 ```
+JSX 元素会通过 `jsx()`/`jsxs()` 运行时转换为函数调用。
 
-JSX 元素通过 `jsx()`/`jsxs()` 运行时转换为函数调用。
+---
 
-## 下一步
+## 后续参考
+- [类型系统](type-system) — 类型推导与检查
+- [局限性](limitations) — 暂不支持的特性
 
-- [类型系统](type-system.md) — 类型推断和检查
-- [限制](limitations.md) — 尚未支持的内容

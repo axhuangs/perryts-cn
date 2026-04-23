@@ -1,6 +1,6 @@
-# 表格
+# 表格（Table）
 
-`Table` 小部件显示带有列、标题和行选择的表格数据。
+`Table` 组件用于展示带列、表头和行选择功能的表格数据。
 
 ## 创建表格
 
@@ -12,7 +12,7 @@ const table = Table(10, 3, (row, col) => {
 });
 ```
 
-`Table(rowCount, colCount, renderCell)` 创建一个表格。渲染函数为每个单元格调用，应返回文本内容。
+`Table(rowCount, colCount, renderCell)` 方法用于创建表格。渲染函数会为每个单元格调用，需返回单元格的文本内容。
 
 ## 列标题
 
@@ -31,13 +31,17 @@ table.setColumnHeader(1, "Email");
 table.setColumnHeader(2, "Role");
 ```
 
-## 列宽度
+`setColumnHeader` 方法用于设置列标题，示例中分别为第0、1、2列设置了“姓名”“邮箱”“角色”相关的英文标题（标识符不翻译）。
+
+## 列宽
 
 ```typescript
 table.setColumnWidth(0, 150);  // Name column
 table.setColumnWidth(1, 250);  // Email column
 table.setColumnWidth(2, 100);  // Role column
 ```
+
+`setColumnWidth` 方法用于设置列宽，示例中分别为姓名列（第0列）设置150像素宽度、邮箱列（第1列）设置250像素宽度、角色列（第2列）设置100像素宽度。
 
 ## 行选择
 
@@ -46,25 +50,29 @@ table.setOnRowSelect((row) => {
   console.log(`Selected row: ${row}`);
 });
 
-// 获取当前选定的行
+// Get the currently selected row
 const selected = table.getSelectedRow();
 ```
 
-## 动态行数
+`setOnRowSelect` 方法用于设置行选择事件回调函数，当行被选中时触发；`getSelectedRow` 方法用于获取当前选中的行。
 
-创建后更新行数：
+## 动态行数量
+
+创建表格后更新行数量的方法：
 
 ```typescript
 table.updateRowCount(newCount);
 ```
 
+`updateRowCount` 方法接收新的行数参数 `newCount`，用于动态更新表格的行数量。
+
 ## 平台说明
 
-| Platform | Implementation |
-|----------|---------------|
-| macOS | NSTableView + NSScrollView |
-| Web | HTML `<table>` |
-| iOS/Android/Linux/Windows | Stubs (pending native implementation) |
+| 平台       | 实现方式                          |
+|------------|-----------------------------------|
+| macOS      | NSTableView + NSScrollView        |
+| Web        | HTML `<table>`                    |
+| iOS/Android/Linux/Windows | 占位实现（待原生功能开发完成） |
 
 ## 完整示例
 
@@ -110,8 +118,8 @@ App({
 });
 ```
 
-## 下一步
+## 后续参考
 
-- [Widgets](widgets.md) — 所有可用的小部件
-- [Layout](layout.md) — 布局容器
-- [Events](events.md) — 事件处理
+- [Widgets](widgets) — 所有可用组件
+- [Layout](layout) — 布局容器
+- [Events](events) — 事件处理

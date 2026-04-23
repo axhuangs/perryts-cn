@@ -1,6 +1,6 @@
-# 画布
+# 画布（Canvas）
 
-`Canvas` 小部件提供了一个用于自定义图形的 2D 绘图表面。
+`Canvas` 组件提供了用于自定义图形绘制的二维绘图平面。
 
 ## 创建画布
 
@@ -8,14 +8,14 @@
 import { Canvas } from "perry/ui";
 
 const canvas = Canvas(400, 300, (ctx) => {
-  // 绘图代码在这里
+  // 绘图代码编写位置
   ctx.fillRect(10, 10, 100, 80);
 });
 ```
 
-`Canvas(width, height, drawCallback)` 创建一个画布并调用您的绘图函数。
+`Canvas(width, height, drawCallback)` 方法用于创建画布并调用自定义的绘图函数。
 
-## 绘制形状
+## 绘制图形
 
 ### 矩形
 
@@ -45,13 +45,13 @@ Canvas(400, 300, (ctx) => {
 });
 ```
 
-### 圆形和弧
+### 圆形与圆弧
 
 ```typescript
 Canvas(400, 300, (ctx) => {
   ctx.setFillColor("#00FF00");
   ctx.beginPath();
-  ctx.arc(200, 150, 50, 0, Math.PI * 2); // x, y, radius, startAngle, endAngle
+  ctx.arc(200, 150, 50, 0, Math.PI * 2); // x, y, 半径, 起始角度, 终止角度
   ctx.fill();
 });
 ```
@@ -60,7 +60,7 @@ Canvas(400, 300, (ctx) => {
 
 ```typescript
 Canvas(400, 300, (ctx) => {
-  ctx.setFillColor("#FF6600");    // 十六进制颜色
+  ctx.setFillColor("#FF6600");    // 十六进制颜色值
   ctx.setStrokeColor("#333333");
   ctx.setLineWidth(3);
 });
@@ -70,12 +70,12 @@ Canvas(400, 300, (ctx) => {
 
 ```typescript
 Canvas(400, 300, (ctx) => {
-  ctx.setGradient("#FF0000", "#0000FF"); // 开始颜色, 结束颜色
+  ctx.setGradient("#FF0000", "#0000FF"); // 起始颜色，终止颜色
   ctx.fillRect(0, 0, 400, 300);
 });
 ```
 
-## 画布上的文本
+## 在画布上绘制文本
 
 ```typescript
 Canvas(400, 300, (ctx) => {
@@ -86,14 +86,14 @@ Canvas(400, 300, (ctx) => {
 
 ## 平台说明
 
-| Platform | Implementation |
-|----------|---------------|
-| macOS | Core Graphics (CGContext) |
-| iOS | Core Graphics (CGContext) |
-| Linux | Cairo |
-| Windows | GDI |
-| Android | Canvas/Bitmap |
-| Web | HTML5 Canvas |
+| 平台       | 实现方式                  |
+|------------|---------------------------|
+| macOS      | Core Graphics (CGContext) |
+| iOS        | Core Graphics (CGContext) |
+| Linux      | Cairo                     |
+| Windows    | GDI                       |
+| Android    | Canvas/Bitmap             |
+| Web        | HTML5 Canvas              |
 
 ## 完整示例
 
@@ -134,8 +134,8 @@ App({
 });
 ```
 
-## 下一步
+## 后续参考
 
-- [Widgets](widgets.md) — 所有可用的小部件
-- [Animation](animation.md) — 动画小部件属性
-- [Styling](styling.md) — 小部件样式
+- [Widgets](widgets) — 所有可用的组件
+- [Animation](animation) — 组件属性动画
+- [Styling](styling) — 组件样式设置

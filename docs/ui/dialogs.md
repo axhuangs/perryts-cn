@@ -1,6 +1,6 @@
 # 对话框
 
-Perry 提供用于文件选择、警报和表单的原生对话框函数。
+Perry 提供用于文件选择、提示框和表单面板的原生对话框功能。
 
 ## 文件打开对话框
 
@@ -13,7 +13,7 @@ if (filePath) {
 }
 ```
 
-返回选定的文件路径，如果取消则返回 `null`。
+返回选中的文件路径，若取消操作则返回 `null`。
 
 ## 文件夹选择对话框
 
@@ -26,20 +26,20 @@ if (folderPath) {
 }
 ```
 
-## 保存文件对话框
+## 文件保存对话框
 
 ```typescript
 import { saveFileDialog } from "perry/ui";
 
 const savePath = saveFileDialog();
 if (savePath) {
-  // 将文件写入 savePath
+  // Write file to savePath
 }
 ```
 
-## 警报
+## 提示框
 
-显示原生警报对话框：
+显示原生提示对话框：
 
 ```typescript
 import { alert } from "perry/ui";
@@ -47,11 +47,11 @@ import { alert } from "perry/ui";
 alert("Operation Complete", "Your file has been saved successfully.");
 ```
 
-`alert(title, message)` 显示带有 OK 按钮的模态警报。
+`alert(title, message)` 用于显示包含“确定”按钮的模态提示框。
 
-## 表单
+## 表单面板
 
-表单是附加到窗口的模态面板：
+表单面板是附着在窗口上的模态面板：
 
 ```typescript
 import { Sheet, Text, Button, VStack } from "perry/ui";
@@ -65,23 +65,24 @@ const sheet = Sheet(
   ])
 );
 
-// 显示表单
+// Show the sheet
 sheet.present();
 ```
 
 ## 平台说明
 
-| Dialog | macOS | iOS | Windows | Linux | Web |
-|--------|-------|-----|---------|-------|-----|
-| File Open | NSOpenPanel | UIDocumentPicker | IFileOpenDialog | GtkFileChooserDialog | `<input type="file">` |
-| File Save | NSSavePanel | — | IFileSaveDialog | GtkFileChooserDialog | Download link |
-| Folder | NSOpenPanel | — | IFileOpenDialog | GtkFileChooserDialog | — |
-| Alert | NSAlert | UIAlertController | MessageBoxW | MessageDialog | `alert()` |
-| Sheet | NSSheet | Modal VC | Modal Dialog | Modal Window | Modal div |
+| 对话框类型 | macOS | iOS | Windows | Linux | Web |
+|------------|-------|-----|---------|-------|-----|
+| 文件打开   | NSOpenPanel | UIDocumentPicker | IFileOpenDialog | GtkFileChooserDialog | `<input type="file">` |
+| 文件保存   | NSSavePanel | — | IFileSaveDialog | GtkFileChooserDialog | Download link |
+| 文件夹     | NSOpenPanel | — | IFileOpenDialog | GtkFileChooserDialog | — |
+| 提示框     | NSAlert | UIAlertController | MessageBoxW | MessageDialog | `alert()` |
+| 表单面板   | NSSheet | Modal VC | Modal Dialog | Modal Window | Modal div |
 
 ## 完整示例
 
 ```typescript
+
 import { App, Text, Button, TextField, VStack, HStack, State, openFileDialog, saveFileDialog, alert } from "perry/ui";
 import { readFileSync, writeFileSync } from "perry/fs";
 
@@ -116,8 +117,8 @@ App({
 });
 ```
 
-## 下一步
+## 后续参考
 
-- [Menus](menus.md) — 菜单栏和上下文菜单
-- [Multi-Window](multi-window.md) — 多窗口
-- [Events](events.md) — 用户交互事件
+- [Menus](menus) — 菜单栏和上下文菜单
+- [Multi-Window](multi-window) — 多窗口功能
+- [Events](events) — 用户交互事件

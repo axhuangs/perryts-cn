@@ -1,12 +1,13 @@
 # 菜单
 
-Perry 支持跨所有平台的原生菜单栏、上下文菜单和工具栏项目。
+Perry 跨所有平台支持原生菜单栏、上下文菜单和工具栏项。
 
 ## 菜单栏
 
-创建原生应用程序菜单栏：
+创建原生应用菜单栏：
 
 ```typescript
+
 import { App, VStack, Text, menuBarCreate, menuBarAddMenu, menuAddItem, menuAddSeparator, menuAddSubmenu, menuBarAttach } from "perry/ui";
 
 // 在 App(...) 之前构建菜单栏
@@ -50,28 +51,28 @@ App({
 
 ### 菜单栏函数
 
-- `menuBarCreate()` — 创建新菜单栏
+- `menuBarCreate()` — 创建新的菜单栏
 - `menuBarAddMenu(menuBar, title)` — 添加顶级菜单，返回菜单句柄
-- `menuAddItem(menu, label, callback, shortcut?)` — 添加带有可选键盘快捷键的菜单项
+- `menuAddItem(menu, label, callback, shortcut?)` — 添加带可选键盘快捷键的菜单项
 - `menuAddSeparator(menu)` — 添加分隔线
 - `menuAddSubmenu(menu, title)` — 添加子菜单，返回子菜单句柄
 - `menuBarAttach(menuBar)` — 将菜单栏附加到应用程序
 
 ### 键盘快捷键
 
-`menuAddItem` 的第 4 个参数是可选的键盘快捷键：
+`menuAddItem` 的第四个参数为可选的键盘快捷键：
 
-| Shortcut | macOS | Other |
+| 快捷键 | macOS 系统 | 其他系统 |
 |----------|-------|-------|
 | `"n"` | Cmd+N | Ctrl+N |
 | `"S"` | Cmd+Shift+S | Ctrl+Shift+S |
 | `"+"` | Cmd++ | Ctrl++ |
 
-大写字母表示 Shift。
+大写字母表示需配合 Shift 键使用。
 
 ## 上下文菜单
 
-小部件上的右键菜单：
+组件上的右键菜单：
 
 ```typescript
 import { Text, contextMenu } from "perry/ui";
@@ -87,9 +88,10 @@ contextMenu(label, [
 
 ## 工具栏
 
-向窗口添加工具栏：
+为窗口添加工具栏：
 
 ```typescript
+
 import { App, VStack, Text, toolbarCreate, toolbarAddItem } from "perry/ui";
 
 const toolbar = toolbarCreate();
@@ -109,18 +111,18 @@ App({
 
 ## 平台说明
 
-| Platform | Menu Bar | Context Menu | Toolbar |
+| 平台 | 菜单栏 | 上下文菜单 | 工具栏 |
 |----------|----------|-------------|---------|
 | macOS | NSMenu | NSMenu | NSToolbar |
-| iOS | — (no menu bar) | UIMenu | UIToolbar |
-| Windows | HMENU/SetMenu | — | Horizontal layout |
-| Linux | GMenu/set_menubar | — | HeaderBar |
+| iOS | 无（无菜单栏） | UIMenu | UIToolbar |
+| Windows | HMENU/SetMenu | 无 | 水平布局 |
+| Linux | GMenu/set_menubar | 无 | HeaderBar |
 | Web | DOM | DOM | DOM |
 
-> **iOS**：菜单栏不适用。使用工具栏和导航模式。
+> **iOS 说明**：菜单栏不适用，应改用工具栏和导航设计模式。
 
-## 下一步
+## 后续参考
 
-- [Events](events.md) — 键盘快捷键和交互
-- [Dialogs](dialogs.md) — 文件对话框和警报
-- [Toolbar and navigation](layout.md)
+- [Events](events) — 键盘快捷键与交互操作
+- [Dialogs](dialogs) — 文件对话框与提示框
+- [Layout](layout)

@@ -1,12 +1,13 @@
 # 相机
 
-`perry/ui` 模块提供带有颜色采样能力的实时相机预览小部件。
+`perry/ui` 模块提供了具备颜色采样能力的实时相机预览组件。
 
 ```typescript
+
 import { CameraView, cameraStart, cameraStop, cameraFreeze, cameraUnfreeze, cameraSampleColor, cameraSetOnTap } from "perry/ui";
 ```
 
-> **平台支持：** 仅 iOS。其他平台计划中。
+> **平台支持**：仅支持 iOS。其他平台的支持正在规划中。
 
 ## 快速示例
 
@@ -44,27 +45,27 @@ App({
 
 ### `CameraView()`
 
-创建实时相机预览小部件。
+创建实时相机预览组件。
 
 ```typescript
 const cam = CameraView();
 ```
 
-返回一个小部件句柄。相机不会自动启动 — 调用 `cameraStart()` 开始捕获。
+返回组件句柄。相机不会自动启动——需调用 `cameraStart()` 开始采集。
 
 ### `cameraStart(handle)`
 
-启动实时相机馈送。
+启动相机实时画面流。
 
 ```typescript
 cameraStart(cam);
 ```
 
-在 iOS 上，相机权限对话框会在首次使用时自动显示。
+在 iOS 系统中，首次使用时会自动弹出相机权限请求对话框。
 
 ### `cameraStop(handle)`
 
-停止相机馈送并释放捕获会话。
+停止相机画面流并释放采集会话。
 
 ```typescript
 cameraStop(cam);
@@ -78,11 +79,11 @@ cameraStop(cam);
 cameraFreeze(cam);
 ```
 
-相机会话保持活动但预览停止更新。适用于您想要检查冻结帧的“捕获”时刻。
+相机会话保持活跃状态，但预览画面停止更新。适用于需要查看冻结帧的“抓拍”场景。
 
 ### `cameraUnfreeze(handle)`
 
-在冻结后恢复实时预览。
+冻结后恢复实时预览。
 
 ```typescript
 cameraUnfreeze(cam);
@@ -90,17 +91,17 @@ cameraUnfreeze(cam);
 
 ### `cameraSampleColor(x, y)`
 
-在标准化坐标处采样像素颜色。
+在归一化坐标处采样像素颜色。
 
 ```typescript
-const rgb = cameraSampleColor(0.5, 0.5); // center of frame
+const rgb = cameraSampleColor(0.5, 0.5); // 画面中心
 ```
 
-- `x`、`y` 是标准化坐标 (0.0–1.0)
-- 返回打包的 RGB 作为数字：`r * 65536 + g * 256 + b`
-- 如果没有帧可用，返回 `-1`
+- `x`、`y` 为归一化坐标（取值范围 0.0–1.0）
+- 返回值为打包后的 RGB 数值：`r * 65536 + g * 256 + b`
+- 若无可用帧，返回 `-1`
 
-要提取单个通道：
+提取各颜色通道的方法：
 
 ```typescript
 const r = Math.floor(rgb / 65536);
@@ -108,26 +109,26 @@ const g = Math.floor((rgb % 65536) / 256);
 const b = Math.floor(rgb % 256);
 ```
 
-颜色在采样点周围的 5x5 像素区域内平均，以减少噪声。
+为降低噪声，采样颜色为采样点周围 5×5 像素区域的平均值。
 
 ### `cameraSetOnTap(handle, callback)`
 
-在相机视图上注册点击处理器。
+为相机视图注册点击事件处理器。
 
 ```typescript
 cameraSetOnTap(cam, (x, y) => {
-  // x, y are normalized coordinates (0.0-1.0)
+  // x、y 为归一化坐标（取值范围 0.0-1.0）
   const rgb = cameraSampleColor(x, y);
 });
 ```
 
-回调接收点击位置的标准化坐标，可以直接传递给 `cameraSampleColor()`。
+回调函数接收点击位置的归一化坐标，可直接传入 `cameraSampleColor()` 使用。
 
-## 实现
+## 实现方式
 
-在 iOS 上，相机使用 AVCaptureSession 与 AVCaptureVideoPreviewLayer 进行 GPU 加速实时预览，使用 AVCaptureVideoDataOutput 进行帧捕获。颜色采样从 CVPixelBuffer 读取像素数据。
+在 iOS 系统中，相机功能基于 AVCaptureSession 实现，通过 AVCaptureVideoPreviewLayer 实现 GPU 加速的实时预览，借助 AVCaptureVideoDataOutput 实现帧采集。颜色采样功能从 CVPixelBuffer 中读取像素数据。
 
-## 下一步
+## 后续参考
 
-- [Widgets](widgets.md) — 所有可用的小部件
-- [Audio Capture](../system/audio.md) — 麦克风输入和声音计量
+- [Widgets](widgets) — 所有可用组件
+- [Audio Capture](../system/audio) — 麦克风输入与声音计量

@@ -40,7 +40,7 @@ export default defineConfig({
         items: [
           { text: '支持的功能', link: '/language/supported-features.html' },
           { text: '类型系统', link: '/language/type-system.html' },
-          { text: '限制', link: '/language/limitations.html' },
+          { text: '局限性', link: '/language/limitations.html' },
         ]
       },
       {
@@ -56,7 +56,7 @@ export default defineConfig({
         text: '原生UI',
         items: [
           { text: 'UI概述', link: '/ui/overview.html' },
-          { text: 'Widgets(控件)', link: '/ui/widgets.html' },
+          { text: 'Widgets(组件)', link: '/ui/widgets.html' },
           { text: 'Layout(布局)', link: '/ui/layout.html' },
           { text: 'Styling(样式)', link: '/ui/styling.html' },
           { text: 'State(状态管理)', link: '/ui/state.html' },

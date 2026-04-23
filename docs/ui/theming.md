@@ -1,6 +1,6 @@
-# 主题
+# 主题定制
 
-`perry-styling` 包为 Perry UI 提供设计系统桥接 — 设计令牌代码生成和具有编译时平台检测的人体工程学样式助手。
+`perry-styling` 包为 Perry UI 提供了一套设计系统桥接能力——包含设计令牌代码生成功能，以及具备编译时平台检测能力的易用型样式辅助工具。
 
 ## 安装
 
@@ -10,7 +10,7 @@ npm install perry-styling
 
 ## 设计令牌代码生成
 
-从 JSON 令牌定义生成类型化主题文件：
+基于 JSON 令牌定义文件生成类型化的主题文件：
 
 ```bash
 perry-styling generate --tokens tokens.json --out src/theme.ts
@@ -51,11 +51,11 @@ perry-styling generate --tokens tokens.json --out src/theme.ts
 }
 ```
 
-带有 `-dark` 后缀的颜色用作暗模式变体。如果未提供暗变体，则浅色值用于两种模式。支持的颜色格式：十六进制（`#RGB`、`#RRGGBB`、`#RRGGBBAA`）、`rgb()`/`rgba()`、`hsl()`/`hsla()` 和 CSS 命名颜色。
+后缀为 `-dark` 的颜色会作为暗黑模式下的变体。若未提供暗黑模式变体，则浅色模式下的值会同时用于两种模式。支持的颜色格式包括：十六进制（`#RGB`、`#RRGGBB`、`#RRGGBBAA`）、`rgb()`/`rgba()`、`hsl()`/`hsla()` 以及 CSS 命名颜色。
 
 ## 生成的类型
 
-代码生成产生类型化接口：
+代码生成工具会产出以下类型化接口：
 
 ```typescript
 interface PerryColor {
@@ -82,7 +82,7 @@ interface ResolvedTheme {
 
 ## 主题解析
 
-根据系统的暗模式设置在运行时解析主题：
+在运行时基于系统的暗黑模式设置解析主题：
 
 ```typescript
 import { getTheme } from "perry-styling";
@@ -92,11 +92,11 @@ const resolved = getTheme(theme);
 // resolved.colors.primary → the correct light/dark variant
 ```
 
-`getTheme()` 调用 `perry/system` 中的 `isDarkMode()` 并返回适当的调色板。
+`getTheme()` 会调用 `perry/system` 中的 `isDarkMode()` 方法，并返回对应的调色板。
 
-## 样式助手
+## 样式辅助工具
 
-用于将样式应用于小部件句柄的人体工程学函数：
+用于为组件句柄应用样式的易用型函数：
 
 ```typescript
 import { applyBg, applyRadius, applyTextColor, applyFontSize, applyGradient } from "perry-styling";
@@ -111,30 +111,30 @@ applyRadius(card, resolved.radius.md);
 applyGradient(card, startColor, endColor, 0); // 0=vertical, 1=horizontal
 ```
 
-### 可用助手
+### 可用的辅助函数
 
-| Function | Description |
+| 函数 | 描述 |
 |----------|-------------|
-| `applyBg(widget, color)` | Set background color |
-| `applyRadius(widget, color)` | Set corner radius |
-| `applyTextColor(widget, color)` | Set text color |
-| `applyFontSize(widget, size)` | Set font size |
-| `applyFontBold(widget)` | Set bold font weight |
-| `applyFontFamily(widget, family)` | Set font family |
-| `applyWidth(widget, width)` | Set width |
-| `applyTooltip(widget, text)` | Set tooltip text |
-| `applyBorderColor(widget, color)` | Set border color |
-| `applyBorderWidth(widget, width)` | Set border width |
-| `applyEdgeInsets(widget, t, r, b, l)` | Set edge insets (padding) |
-| `applyOpacity(widget, alpha)` | Set opacity |
-| `applyGradient(widget, start, end, dir)` | Set gradient (0=vertical, 1=horizontal) |
-| `applyButtonBg(btn, color)` | Set button background |
-| `applyButtonTextColor(btn, color)` | Set button text color |
-| `applyButtonBordered(btn)` | Set bordered button style |
+| `applyBg(widget, color)` | 设置背景色 |
+| `applyRadius(widget, radius)` | 设置圆角半径 |
+| `applyTextColor(widget, color)` | 设置文本颜色 |
+| `applyFontSize(widget, size)` | 设置字体大小 |
+| `applyFontBold(widget)` | 设置字体加粗 |
+| `applyFontFamily(widget, family)` | 设置字体族 |
+| `applyWidth(widget, width)` | 设置宽度 |
+| `applyTooltip(widget, text)` | 设置提示文本 |
+| `applyBorderColor(widget, color)` | 设置边框颜色 |
+| `applyBorderWidth(widget, width)` | 设置边框宽度 |
+| `applyEdgeInsets(widget, t, r, b, l)` | 设置边距（内边距） |
+| `applyOpacity(widget, alpha)` | 设置不透明度 |
+| `applyGradient(widget, start, end, dir)` | 设置渐变（0=垂直方向，1=水平方向） |
+| `applyButtonBg(btn, color)` | 设置按钮背景色 |
+| `applyButtonTextColor(btn, color)` | 设置按钮文本颜色 |
+| `applyButtonBordered(btn)` | 设置按钮为边框样式 |
 
 ## 平台常量
 
-`perry-styling` 基于 `__platform__` 内置导出编译时平台常量：
+`perry-styling` 会基于内置的 `__platform__` 常量导出编译时平台常量：
 
 ```typescript
 import { isMac, isIOS, isAndroid, isWindows, isLinux, isDesktop, isMobile } from "perry-styling";
@@ -146,9 +146,9 @@ if (isMobile) {
 }
 ```
 
-这些在编译时由 LLVM 常量折叠 — 死分支被消除，没有运行时成本。
+这些常量会在编译时由 LLVM 进行常量折叠优化——无效分支会被移除，且不会产生任何运行时开销。
 
-## 下一步
+## 后续参考
 
-- [Styling](styling.md) — 小部件样式基础
-- [State Management](state.md) — 反应式绑定
+- [Styling](styling) — 组件样式基础
+- [State](state) — 响应式绑定

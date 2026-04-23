@@ -14,31 +14,18 @@ hero:
 
 features:
   - title: 原生性能
-    details: 编译为机器代码，比 Node.js 快 2 倍。没有 JIT 预热，没有 V8。
+    details: 通过 LLVM 编译为机器码。像斐波那契数列这类整数密集型代码，运行速度比 Node.js 快 2 倍。
   - title: 真正的多线程
-    details: parallelMap 和 spawn 提供实际的 OS 线程，具有编译时安全性。
+    details: parallelMap 和 spawn 为你提供具备编译时类型安全的原生操作系统线程。无隔离环境（isolates）、无消息传递开销。这是任何 JS 运行时都无法实现的能力。
   - title: 原生 UI
-    details: 构建桌面和移动应用，编译为真正的 AppKit、UIKit、GTK4 或 Win32 小部件。
+    details: 使用声明式 TypeScript 构建桌面和移动应用，代码会编译为原生的 AppKit、UIKit、GTK4、Win32 或 DOM 组件。
   - title: 7 个目标平台
-    details: 从同一源代码支持 macOS、iOS、Android、Windows、Linux、Web 和 WebAssembly。
+    details: 同一套源代码可编译为 macOS、iOS、Android、Windows、Linux、Web 及 WebAssembly 平台的产物。
   - title: 熟悉的生态系统
-    details: 使用 npm 包如 fastify、mysql2、redis、bcrypt、lodash 等，原生编译。
+    details: 可使用 fastify、mysql2、redis、bcrypt、lodash 等 npm 包，并将其原生编译。
   - title: 零配置
-    details: 将 Perry 指向 .ts 文件并获取二进制文件。不需要 tsconfig.json。
+    details: 只需将 Perry 指向 .ts 文件，即可生成二进制文件。无需配置 tsconfig.json。
 
 ---
 
-> Perry 是一个原生 TypeScript 编译器，它将 TypeScript 源代码直接编译为原生可执行文件。没有 JavaScript 运行时，没有 JIT 预热，没有 V8 — 您的 TypeScript 编译为真正的二进制文件。
-
-```typescript
-// hello.ts
-console.log("Hello from Perry!");
-```
-
-```bash
-$ perry hello.ts -o hello
-$ ./hello
-Hello from Perry!
-```
-
-查看 [介绍](/introduction.html) 以了解更多。
+> 使用豆包AI辅助翻译，人工核对。
