@@ -1,8 +1,8 @@
 # 通知
 
-使用平台的通知系统发送本地通知。
+使用各平台的通知系统发送本地通知。
 
-## 使用
+## 使用方法
 
 ```typescript
 import { sendNotification } from "perry/system";
@@ -12,19 +12,19 @@ sendNotification("Download Complete", "Your file has been downloaded successfull
 
 ## 平台实现
 
-| 平台 | 后端 |
-|----------|---------|
-| macOS | UNUserNotificationCenter |
-| iOS | UNUserNotificationCenter |
-| Android | NotificationManager |
-| Windows | Toast notifications |
-| Linux | GNotification |
-| Web | Web Notification API |
+| 平台     | 底层实现                 |
+|----------|--------------------------|
+| macOS    | UNUserNotificationCenter |
+| iOS      | UNUserNotificationCenter |
+| Android  | NotificationManager      |
+| Windows  | Toast notifications      |
+| Linux    | GNotification            |
+| Web      | Web Notification API     |
 
-> **权限**：在 macOS、iOS 和 Web 上，用户可能需要授予通知权限。在首次使用时，系统将自动提示权限。
+> **权限说明**：在 macOS、iOS 和 Web 平台上，用户可能需要授予通知权限。首次使用时，系统会自动弹出权限请求提示。
 
-## 下一步
+## 后续参考
 
-- [Keychain](keychain.md) — 安全存储
-- [Other](other.md) — 其他系统 API
-- [Overview](overview.md) — 所有系统 API
+- [Keychain](keychain) — 安全存储
+- [Other](other) — 其他系统 API
+- [Overview](overview) — 所有系统 API

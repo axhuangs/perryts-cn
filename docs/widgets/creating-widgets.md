@@ -1,8 +1,8 @@
-# 创建控件
+# 创建小组件
 
-使用 `Widget()` 函数定义主屏幕控件。
+使用 `Widget()` 函数定义主屏小组件。
 
-## 控件声明
+## 小组件声明
 
 ```typescript
 import { Widget, Text, VStack, HStack, Image, Spacer } from "perry/widget";
@@ -29,22 +29,22 @@ Widget({
 });
 ```
 
-## 控件选项
+## 小组件配置项
 
-| Property | Type | Description |
+| 属性 | 类型 | 描述 |
 |----------|------|-------------|
-| `kind` | `string` | Unique identifier for the widget |
-| `displayName` | `string` | Name shown in widget gallery |
-| `description` | `string` | Description in widget gallery |
-| `entryFields` | `object` | Data fields with types (`"string"`, `"number"`, `"boolean"`, arrays, optionals, objects) |
-| `render` | `function` | Render function receiving entry data, returns widget tree. Optional 2nd param for family. |
-| `config` | `object` | Configurable parameters the user can edit (see below) |
-| `provider` | `function` | Timeline provider function for dynamic data (see below) |
-| `appGroup` | `string` | App group identifier for sharing data with the host app |
+| `kind` | `string` | 小组件的唯一标识符 |
+| `displayName` | `string` | 小组件库中显示的名称 |
+| `description` | `string` | 小组件库中的描述信息 |
+| `entryFields` | `object` | 带类型的数据字段（支持 `"string"`、`"number"`、`"boolean"`、数组、可选类型、对象） |
+| `render` | `function` | 接收条目数据的渲染函数，返回小组件树结构。第二个参数为可选参数，用于指定小组件尺寸类型。 |
+| `config` | `object` | 用户可编辑的配置参数（见下文） |
+| `provider` | `function` | 用于为小组件获取动态数据的时间线提供器函数（见下文） |
+| `appGroup` | `string` | 用于与宿主应用共享数据的应用组标识符 |
 
-## Entry Fields
+## 条目字段
 
-Entry fields define the data your widget displays. Each field has a name and type:
+条目字段用于定义小组件展示的数据，每个字段包含名称和类型：
 
 ```typescript
 entryFields: {
@@ -54,19 +54,19 @@ entryFields: {
 }
 ```
 
-### Array, Optional, and Object Fields
+### 数组、可选及对象字段
 
-Entry fields support richer types beyond primitives:
+条目字段支持除基本类型外更丰富的类型：
 
 ```typescript
 entryFields: {
-  items: [{ name: "string", value: "number" }],  // Array of objects
-  subtitle: "string?",                             // Optional string
-  stats: { wins: "number", losses: "number" },     // Nested object
+  items: [{ name: "string", value: "number" }],  // 对象数组
+  subtitle: "string?",                             // 可选字符串
+  stats: { wins: "number", losses: "number" },     // 嵌套对象
 }
 ```
 
-These compile to a Swift `TimelineEntry` struct:
+这些字段会编译为 Swift 中的 `TimelineEntry` 结构体：
 
 ```swift
 struct WeatherEntry: TimelineEntry {
@@ -77,9 +77,9 @@ struct WeatherEntry: TimelineEntry {
 }
 ```
 
-## Conditionals in Render
+## 渲染中的条件判断
 
-Use ternary expressions for conditional rendering:
+可使用三元表达式实现条件渲染：
 
 ```typescript
 render: (entry) =>
@@ -89,18 +89,18 @@ render: (entry) =>
   ]),
 ```
 
-## Template Literals
+## 模板字面量
 
-Template literals in widget text are compiled to Swift string interpolation:
+小组件文本中的模板字面量会编译为 Swift 字符串插值：
 
 ```typescript
 Text(`${entry.name}: ${entry.score} points`)
-// Compiles to: Text("\(entry.name): \(entry.score) points")
+// 编译后：Text("\(entry.name): \(entry.score) points")
 ```
 
-## Configuration Parameters
+## 配置参数
 
-The `config` field defines user-editable parameters that appear in the widget's edit UI:
+`config` 字段用于定义出现在小组件编辑界面中的用户可编辑参数：
 
 ```typescript
 Widget({
@@ -116,9 +116,9 @@ Widget({
 });
 ```
 
-## Provider Function
+## 提供器函数
 
-The `provider` field defines a timeline provider that fetches data for the widget:
+`provider` 字段用于定义为小组件获取数据的时间线提供器：
 
 ```typescript
 Widget({
@@ -140,9 +140,9 @@ Widget({
 });
 ```
 
-### Placeholder Data
+### 占位数据
 
-When the widget has no data yet (e.g., first load), the provider can return placeholder data by providing a `placeholder` field:
+当小组件暂未获取到数据时（如首次加载），提供器可通过返回 `placeholder` 字段来设置占位数据：
 
 ```typescript
 Widget({
@@ -153,9 +153,9 @@ Widget({
 });
 ```
 
-## Family-Specific Rendering
+## 按尺寸类型定制渲染
 
-The render function accepts an optional second parameter for the widget family, allowing different layouts per size:
+渲染函数的第二个可选参数为小组件尺寸类型，可针对不同尺寸实现差异化布局：
 
 ```typescript
 render: (entry, family) =>
@@ -170,11 +170,11 @@ render: (entry, family) =>
       ]),
 ```
 
-Supported families: `"systemSmall"`, `"systemMedium"`, `"systemLarge"`, `"accessoryCircular"`, `"accessoryRectangular"`, `"accessoryInline"`.
+支持的尺寸类型：`"systemSmall"`、`"systemMedium"`、`"systemLarge"`、`"accessoryCircular"`、`"accessoryRectangular"`、`"accessoryInline"`。
 
-## App Group
+## 应用组
 
-The `appGroup` field specifies a shared container for data exchange between the host app and the widget:
+`appGroup` 字段用于指定宿主应用与小组件之间进行数据交换的共享容器：
 
 ```typescript
 Widget({
@@ -184,9 +184,9 @@ Widget({
 });
 ```
 
-## Multiple Widgets
+## 多小组件定义
 
-Define multiple widgets in a single file. They're bundled into a `WidgetBundle`:
+可在单个文件中定义多个小组件，它们会被打包至一个 `WidgetBundle` 中：
 
 ```typescript
 Widget({
@@ -200,7 +200,7 @@ Widget({
 });
 ```
 
-## Next Steps
+## 后续参考
 
-- [Components](components.md) — Available widget components and modifiers
-- [Overview](overview.md) — Widget system overview
+- [Components & Modifiers](components) — 可用的小组件组件及修饰器
+- [小组件概述](overview) — 小组件系统概述

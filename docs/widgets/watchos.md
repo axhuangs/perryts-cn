@@ -1,20 +1,20 @@
-# watchOS Complications
+# watchOS 复杂功能（Complications）
 
-Perry 控件可以使用 `--target watchos-widget` 编译为 watchOS WidgetKit complications。相同的 `Widget({...})` 源产生 iOS 和 watchOS 控件——支持的系列确定渲染。
+Perry 小组件可通过 `--target watchos-widget` 编译为 watchOS WidgetKit 复杂功能。同一 `Widget({...})` 源代码可同时生成 iOS 和 watchOS 小组件——具体渲染效果由所支持的样式族（families）决定。
 
-## 附件系列
+## 辅助样式族（Accessory Families）
 
-watchOS complications 使用附件系列而不是系统系列：
+watchOS 复杂功能使用辅助样式族，而非系统样式族：
 
-| Family | Size | Best For |
+| 样式族（Family） | 尺寸 | 适用场景 |
 |--------|------|----------|
-| `accessoryCircular` | ~76x76pt | Single icon, number, or Gauge |
-| `accessoryRectangular` | ~160x76pt | 2-3 lines of text |
-| `accessoryInline` | Single line | Short text only |
+| `accessoryCircular` | 约76x76点 | 单个图标、数字或仪表盘（Gauge） |
+| `accessoryRectangular` | 约160x76点 | 2-3行文本 |
+| `accessoryInline` | 单行 | 仅短文本 |
 
-## Gauge 组件
+## 仪表盘组件（Gauge Component）
 
-`Gauge` 组件专为 watchOS 圆形 complications 设计：
+`Gauge` 组件专为 watchOS 圆形复杂功能设计：
 
 ```typescript
 import { Widget, Text, VStack, Gauge } from "perry/widget";
@@ -38,19 +38,19 @@ Widget({
 })
 ```
 
-### Gauge 样式
+### 仪表盘样式（Gauge Styles）
 
-- **`circular`** — 环形仪表，映射到 SwiftUI 中的 `.gaugeStyle(.accessoryCircularCapacity)`
-- **`linear`** / **`linearCapacity`** — 水平条，映射到 `.gaugeStyle(.linearCapacity)`
+- **`circular`** — 环形仪表盘，对应 SwiftUI 中的 `.gaugeStyle(.accessoryCircularCapacity)`
+- **`linear`** / **`linearCapacity`** — 水平条形图，对应 `.gaugeStyle(.linearCapacity)`
 
-## 刷新预算
+## 刷新预算（Refresh Budgets）
 
-watchOS 比 iOS 有更严格的刷新预算：
-- 推荐：每 60 分钟刷新一次 (`reloadPolicy: { after: { minutes: 60 } }`)
-- 最大：系统可能会更激进地限制
-- 后台刷新使用 `BackgroundTask` 框架
+watchOS 的刷新预算比 iOS 更为严格：
+- 推荐配置：每60分钟刷新一次（`reloadPolicy: { after: { minutes: 60 } }`）
+- 上限说明：系统可能会比 iOS 更激进地限制刷新频率
+- 后台刷新：基于 `BackgroundTask` 框架实现
 
-## 编译
+## 编译（Compilation）
 
 ```bash
 # For Apple Watch device
@@ -60,7 +60,7 @@ perry widget.ts --target watchos-widget --app-bundle-id com.example.app -o widge
 perry widget.ts --target watchos-widget-simulator --app-bundle-id com.example.app -o widget_out
 ```
 
-构建：
+构建命令：
 ```bash
 xcrun --sdk watchos swiftc -target arm64-apple-watchos9.0 \
   widget_out/*.swift \
@@ -68,12 +68,12 @@ xcrun --sdk watchos swiftc -target arm64-apple-watchos9.0 \
   -o widget_out/WidgetExtension
 ```
 
-## 配置
+## 配置（Configuration）
 
-- watchOS 10+ 支持 AppIntent 用于控件配置（与 iOS 17+ 相同）
-- 较旧的 watchOS 版本自动获取 `StaticConfiguration` 回退
-- `config` 参数与 iOS 完全相同工作
+- watchOS 10及以上版本支持通过 AppIntent 实现小组件配置（与 iOS 17及以上版本一致）
+- 旧版 watchOS 会自动降级使用 `StaticConfiguration` 作为兜底方案
+- `config` 参数的使用方式与 iOS 完全一致
 
-## 内存考虑
+## 内存考量（Memory Considerations）
 
-watchOS 控件扩展比 iOS (~30MB) 有更严格的内存限制 (~15-20MB)。仅提供者编译方法至关重要——只有数据获取代码原生运行，保持内存使用最小。
+watchOS 小组件扩展的内存限制比 iOS 更严格（约15-20MB），而 iOS 约为30MB。仅编译数据提供器（provider-only）的实现方式至关重要——仅原生运行数据获取代码，可将内存占用降至最低。

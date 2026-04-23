@@ -1,26 +1,26 @@
-# 控件组件和修饰符
+# 小组件与修饰器
 
-控件可用的组件和修饰符。
+本文档介绍适用于小组件（Widget）的可用组件及修饰器。
 
-## 文本
+## 文本（Text）
 
 ```typescript
 Text("Hello, World!")
 Text(`${entry.name}: ${entry.value}`)
 ```
 
-### 文本修饰符
+### 文本修饰器
 
 ```typescript
 const t = Text("Styled");
-t.font("title");       // .title, .headline, .body, .caption, etc.
-t.color("blue");       // Named color or hex
+t.font("title");       // .title、.headline、.body、.caption 等字体样式
+t.color("blue");       // 命名颜色或十六进制颜色值
 t.bold();
 ```
 
-## 布局
+## 布局（Layout）
 
-### VStack
+### 垂直栈（VStack）
 
 ```typescript
 VStack([
@@ -29,7 +29,7 @@ VStack([
 ])
 ```
 
-### HStack
+### 水平栈（HStack）
 
 ```typescript
 HStack([
@@ -39,7 +39,7 @@ HStack([
 ])
 ```
 
-### ZStack
+### 层级栈（ZStack）
 
 ```typescript
 ZStack([
@@ -48,9 +48,9 @@ ZStack([
 ])
 ```
 
-## Spacer
+## 间距填充（Spacer）
 
-Flexible space that expands to fill available room:
+可自适应扩展以填充可用空间的弹性间距：
 
 ```typescript
 HStack([
@@ -60,18 +60,18 @@ HStack([
 ])
 ```
 
-## Image
+## 图片（Image）
 
-Display SF Symbols or asset images:
+用于显示 SF Symbols 图标或资源图片：
 
 ```typescript
-Image("star.fill")           // SF Symbol
-Image("cloud.sun.rain.fill") // SF Symbol
+Image("star.fill")           // SF Symbol 图标
+Image("cloud.sun.rain.fill") // SF Symbol 图标
 ```
 
-## ForEach
+## 循环渲染（ForEach）
 
-Iterate over array entry fields to render a list of components:
+遍历数组类型的 entry 字段，渲染组件列表：
 
 ```typescript
 ForEach(entry.items, (item) =>
@@ -83,9 +83,9 @@ ForEach(entry.items, (item) =>
 )
 ```
 
-## Divider
+## 分隔线（Divider）
 
-A visual separator line:
+用于视觉分隔的线条：
 
 ```typescript
 VStack([
@@ -95,29 +95,29 @@ VStack([
 ])
 ```
 
-## Label
+## 标签（Label）
 
-A label with text and an SF Symbol icon:
+包含文本和 SF Symbols 图标的标签组件：
 
 ```typescript
 Label("Downloads", "arrow.down.circle")
 Label(`${entry.count} items`, "folder.fill")
 ```
 
-## Gauge
+## 仪表盘（Gauge）
 
-A circular or linear progress indicator:
+圆形或线性进度指示器：
 
 ```typescript
-Gauge(entry.progress, 0, 100)       // value, min, max
+Gauge(entry.progress, 0, 100)       // 参数：值、最小值、最大值
 Gauge(entry.battery, 0, 1.0)
 ```
 
-## Modifiers
+## 修饰器（Modifiers）
 
-Widget components support SwiftUI-style modifiers:
+小组件组件支持 SwiftUI 风格的修饰器：
 
-### Font
+### 字体（Font）
 
 ```typescript
 Text("Title").font("title")
@@ -125,67 +125,67 @@ Text("Body").font("body")
 Text("Caption").font("caption")
 ```
 
-### Color
+### 颜色（Color）
 
 ```typescript
 Text("Red text").color("red")
 Text("Custom").color("#FF6600")
 ```
 
-### Padding
+### 内边距（Padding）
 
 ```typescript
 VStack([...]).padding(16)
 ```
 
-### Frame
+### 框架（Frame）
 
 ```typescript
 widget.frame(width, height)
 ```
 
-### Max Width
+### 最大宽度（Max Width）
 
 ```typescript
-widget.maxWidth("infinity")   // Expand to fill available width
+widget.maxWidth("infinity")   // 扩展至填充可用宽度
 ```
 
-### Minimum Scale Factor
+### 最小缩放系数（Minimum Scale Factor）
 
-Allow text to shrink to fit:
+允许文本自动缩小以适配容器：
 
 ```typescript
 Text("Long text").minimumScaleFactor(0.5)
 ```
 
-### Container Background
+### 容器背景（Container Background）
 
-Set background color for the widget container:
+为小组件容器设置背景色：
 
 ```typescript
 VStack([...]).containerBackground("blue")
 ```
 
-### Widget URL
+### 小组件链接（Widget URL）
 
-Make the widget tappable with a deep link:
+为小组件添加可点击的深度链接：
 
 ```typescript
 VStack([...]).url("myapp://detail/123")
 ```
 
-### Edge-Specific Padding
+### 指定边距（Edge-Specific Padding）
 
-Apply padding to specific edges:
+为特定边应用内边距：
 
 ```typescript
 VStack([...]).paddingEdge("top", 8)
 VStack([...]).paddingEdge("horizontal", 16)
 ```
 
-## Conditionals
+## 条件渲染（Conditionals）
 
-Render different components based on entry data:
+基于 entry 数据渲染不同组件：
 
 ```typescript
 render: (entry) =>
@@ -196,7 +196,7 @@ render: (entry) =>
   ]),
 ```
 
-## Complete Example
+## 完整示例
 
 ```typescript
 import { Widget, Text, VStack, HStack, Image, Spacer } from "perry/widget";
@@ -237,7 +237,7 @@ Widget({
 });
 ```
 
-## Next Steps
+## 后续参考
 
-- [Creating Widgets](creating-widgets.md) — Widget() API
-- [Overview](overview.md) — Widget system overview
+- [Creating Widgets](creating-widgets) — Widget() API
+- [小组件概述](overview) — 小组件系统整体介绍

@@ -1,16 +1,16 @@
-# App Store 审核
+# App Store 评分请求
 
-使用 iOS 和 Android 上的原生应用商店审核对话框提示用户对您的应用进行评分。
+引导用户通过 iOS 和 Android 系统原生的 App Store 评分对话框为你的应用评分。
 
-`perry-appstore-review` 扩展公开了一个单一函数——`requestReview()`——它打开平台的原生审核提示。它不做其他事情：何时以及多久询问一次完全由您决定。
+`perry-appstore-review` 扩展仅暴露一个函数 —— `requestReview()`，用于唤起平台原生的评分弹窗。该函数不处理其他逻辑：何时触发、触发频率完全由你决定。
 
-**仓库：** [github.com/PerryTS/appstorereview](https://github.com/PerryTS/appstorereview)
+**代码仓库：** [github.com/PerryTS/appstorereview](https://github.com/PerryTS/appstorereview)
 
 ## 快速开始
 
 ### 1. 添加扩展
 
-将扩展克隆或复制到项目的扩展目录中：
+将扩展克隆或复制到项目的 extensions 目录：
 
 ```bash
 mkdir -p extensions
@@ -19,7 +19,7 @@ git clone https://github.com/PerryTS/appstorereview.git perry-appstore-review
 cd ..
 ```
 
-您的项目结构：
+项目结构如下：
 
 ```
 my-app/
@@ -30,12 +30,12 @@ my-app/
     └── perry-appstore-review/
 ```
 
-### 2. 在您的应用中使用
+### 2. 在应用中使用
 
 ```typescript
 import { requestReview } from "perry-appstore-review";
 
-// 当用户完成有意义的操作时显示审核提示
+// 在用户完成关键操作时展示评分弹窗
 async function onLevelComplete() {
   await requestReview();
 }
@@ -47,13 +47,13 @@ async function onLevelComplete() {
 perry src/index.ts -o app --target ios --bundle-extensions ./extensions
 ```
 
-`--bundle-extensions` 标志告诉 Perry 发现、编译并链接给定目录中的所有原生扩展。应用商店审核原生代码被编译并静态链接到您的二进制文件中——没有运行时依赖。
+`--bundle-extensions` 标识用于告知 Perry 工具发现、编译并链接指定目录下的所有原生扩展。App Store 评分相关的原生代码会被编译并静态链接到二进制文件中 —— 无运行时依赖。
 
 ## API
 
 ### `requestReview(): Promise<void>`
 
-打开原生应用商店审核提示。返回一个在提示被呈现（或被操作系统跳过）时解析的 promise。
+唤起原生的 App Store 评分弹窗。返回一个 Promise 对象，当弹窗展示完成（或被系统跳过）时状态变为已解析。
 
 ```typescript
 import { requestReview } from "perry-appstore-review";
@@ -61,55 +61,55 @@ import { requestReview } from "perry-appstore-review";
 await requestReview();
 ```
 
-该函数仅触发提示。它不会：
-- 跟踪用户是否已经审核
-- 限制提示出现的频率（iOS 自动执行此操作；Android 不执行）
-- 返回用户是否实际留下了审核（两个平台都不提供此信息）
+该函数仅负责触发弹窗，不包含以下行为：
+- 追踪用户是否已提交评分
+- 限制弹窗展示频率（iOS 系统会自动限制，Android 无此机制）
+- 返回用户是否实际提交了评分（两大平台均未提供该信息）
 
 ## 平台行为
 
 ### iOS
 
-使用 StoreKit 中的 [`SKStoreReviewController.requestReview(in:)`](https://developer.apple.com/documentation/storekit/skstorereviewcontroller/requestreview(in:))。
+使用 StoreKit 框架中的 [`SKStoreReviewController.requestReview(in:)`](https://developer.apple.com/documentation/storekit/skstorereviewcontroller/requestreview(in:)) 接口。
 
-| 细节 | 值 |
-|------|-----|
+| 详情 | 取值 |
+|------|-------|
 | 原生 API | `SKStoreReviewController.requestReview(in: UIWindowScene)` |
 | 最低 iOS 版本 | 14.0 |
-| 框架 | StoreKit |
-| 线程 | 自动分派到主线程 |
-| 限制 | Apple 将显示限制为每个应用每 365 天周期最多 3 次。系统可能会静默忽略调用。 |
-| 开发构建 | 在调试/TestFlight 构建中始终显示 |
-| 用户控制 | 用户可以在设置 > App Store 中禁用审核提示 |
+| 依赖框架 | StoreKit |
+| 执行线程 | 自动分发至主线程 |
+| 频率限制 | Apple 限制每个应用每 365 天最多展示 3 次。系统可能静默忽略调用请求。 |
+| 开发构建版本 | 调试/TestFlight 构建版本中始终展示 |
+| 用户控制 | 用户可在“设置 > App Store”中关闭评分弹窗 |
 
-**重要：** Apple 的限制意味着每次调用 `requestReview()` 时都不保证提示会出现。设计您的应用流程，使不显示提示不会破坏用户体验。
+**重要提示：** 由于 Apple 的频率限制机制，调用 `requestReview()` 并不保证每次都能展示弹窗。设计应用流程时，需确保弹窗未展示的情况下不会影响用户体验。
 
 ### macOS
 
-使用相同的 StoreKit API。与 iOS 原生 crate 共享（两者都从 `crate-ios` 编译）。
+使用与 iOS 相同的 StoreKit API，共享 iOS 原生 crate 代码（均基于 `crate-ios` 编译）。
 
-| 细节 | 值 |
-|------|-----|
+| 详情 | 取值 |
+|------|-------|
 | 原生 API | `SKStoreReviewController.requestReview()` |
 | 最低 macOS 版本 | 13.0 |
-| 框架 | StoreKit |
-| 限制 | 与 iOS 相同——系统控制 |
+| 依赖框架 | StoreKit |
+| 频率限制 | 与 iOS 一致 —— 由系统控制 |
 
 仅适用于通过 Mac App Store 分发的应用。
 
 ### Android
 
-使用 [Google Play In-App Review API](https://developer.android.com/guide/playcore/in-app-review)。
+使用 [Google Play 应用内评分 API](https://developer.android.com/guide/playcore/in-app-review)。
 
-| 细节 | 值 |
-|------|-----|
+| 详情 | 取值 |
+|------|-------|
 | 原生 API | `ReviewManager.requestReviewFlow()` + `launchReviewFlow()` |
-| 库 | `com.google.android.play:review` |
-| 最低 API 级别 | 21 (Android 5.0) |
-| 限制 | Google 强制执行配额——提示可能不会每次都出现 |
-| 执行 | 在后台线程上运行以避免阻塞 UI |
+| 依赖库 | `com.google.android.play:review` |
+| 最低 API 级别 | 21（Android 5.0） |
+| 频率限制 | Google 设有调用配额 —— 弹窗可能并非每次调用都展示 |
+| 执行方式 | 在后台线程运行，避免阻塞 UI |
 
-**必需的 Gradle 依赖：** Google Play In-App Review API 不是 Android SDK 的一部分。您必须将其添加到应用的 `build.gradle`：
+**必选 Gradle 依赖：** Google Play 应用内评分 API 不属于 Android SDK 内置组件，需在应用的 `build.gradle` 中添加以下依赖：
 
 ```groovy
 dependencies {
@@ -117,17 +117,17 @@ dependencies {
 }
 ```
 
-如果没有此依赖，`requestReview()` 将以解释缺失库的错误解析。
+若未添加该依赖，`requestReview()` 会解析为错误状态，并提示缺少相关库。
 
 ### 其他平台
 
-在不支持的平台（Linux、Windows、Web）上，`requestReview()` 立即以错误解析。它不会抛出——您的应用正常继续。
+在不支持的平台（Linux、Windows、Web）上，`requestReview()` 会立即解析为错误状态，但不会抛出异常 —— 应用可正常运行。
 
 ## 最佳实践
 
-**在正确时刻询问。** 在积极体验之后提示——完成关卡、完成任务、实现目标。不要在首次启动或入门期间询问。
+**选择合适的触发时机。** 在用户获得正向体验后触发弹窗 —— 例如完成关卡、结束任务、达成目标时。避免在首次启动或引导流程中触发。
 
-**不要询问太频繁。** 即使 iOS 自动限制，Android 也没有同样严格的限制。实施您自己的逻辑来跟踪上次询问的时间：
+**避免频繁触发。** 尽管 iOS 会自动限制频率，但 Android 无严格的内置限制。需自行实现逻辑追踪上次触发时间：
 
 ```typescript
 import { requestReview } from "perry-appstore-review";
@@ -145,33 +145,33 @@ async function maybeAskForReview() {
 }
 ```
 
-**不要基于审核条件应用行为。** iOS 和 Android 都不会告诉您用户是否留下了审核、给了评分或关闭了提示。promise 解析并不意味着提交了审核。
+**不要基于评分结果调整应用行为。** iOS 和 Android 均不会返回用户是否提交评分、给出星级或关闭弹窗的信息。Promise 解析仅代表弹窗流程结束，不代表用户已提交评分。
 
-**不要在原生提示之前使用自定义审核对话框。** Apple 和 Google 都不鼓励在原生提示之前显示您自己的“评价此应用？”对话框。原生提示设计为低摩擦——添加预提示会增加放弃率。
+**不要在原生弹窗前展示自定义评分对话框。** Apple 和 Google 均不建议在原生弹窗前展示自定义的“是否评分”对话框。原生弹窗设计为低操作成本形式 —— 新增前置弹窗会提高用户放弃率。
 
 ## 扩展结构
 
-扩展遵循标准的 [原生扩展](native-extensions.md) 布局：
+该扩展遵循标准的 [原生扩展](native-extensions) 目录结构：
 
 ```
 perry-appstore-review/
 ├── package.json              # 声明 sb_appreview_request 函数
 ├── src/
-│   └── index.ts              # 导出 requestReview()
-├── crate-ios/                # iOS/macOS: Swift → SKStoreReviewController
+│   └── index.ts              # 导出 requestReview() 函数
+├── crate-ios/                # iOS/macOS：Swift 封装 → SKStoreReviewController
 │   ├── Cargo.toml
 │   ├── build.rs              # 将 Swift 编译为静态库
-│   ├── src/lib.rs            # Rust FFI 桥接
+│   ├── src/lib.rs            # Rust FFI 桥接层
 │   └── swift/review_bridge.swift
-├── crate-android/            # Android: JNI → Play In-App Review API
+├── crate-android/            # Android：JNI 封装 → Play 应用内评分 API
 │   ├── Cargo.toml
 │   └── src/lib.rs
-└── crate-stub/               # 其他平台：以错误解析
+└── crate-stub/               # 其他平台：解析为错误状态
     ├── Cargo.toml
     └── src/lib.rs
 ```
 
-在 `package.json` 中声明了一个原生函数：
+`package.json` 中声明了一个原生函数：
 
 ```json
 {
@@ -185,10 +185,10 @@ perry-appstore-review/
 }
 ```
 
-TypeScript 层将其包装到公共 `requestReview()` 函数中。原生层创建一个 Perry promise，调用平台 API，并在完成后解析 promise。
+TypeScript 层将该原生函数封装为公共的 `requestReview()` 函数。原生层会创建 Perry 承诺对象，调用平台 API，并在操作完成后解析该承诺。
 
-## Next Steps
+## 后续参考
 
-- [Native Extensions](native-extensions.md) — 原生扩展如何工作，创建您自己的
-- [iOS Platform](../platforms/ios.md) — iOS 平台指南
-- [Android Platform](../platforms/android.md) — Android 平台指南
+- [Native Extensions](native-extensions) —— 原生扩展工作原理及自定义扩展开发指南
+- [iOS Platform](../platforms/ios) —— iOS 平台使用指南
+- [Android Platform](../platforms/android) —— Android 平台使用指南

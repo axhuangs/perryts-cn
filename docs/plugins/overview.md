@@ -1,28 +1,28 @@
 # 插件系统概述
 
-Perry 支持将原生插件作为共享库（`.dylib`/`.so`）。插件使用自定义钩子、工具、服务和路由扩展 Perry 应用程序。
+Perry 支持将原生插件作为共享库（.dylib/.so）。插件可通过自定义钩子、工具、服务和路由扩展 Perry 应用的功能。
 
-## 它如何工作
+## 工作原理
 
-1. 插件是具有 `activate(api)` 和 `deactivate()` 入口点的 Perry 编译共享库
-2. 主机应用程序使用 `loadPlugin(path)` 加载插件
+1. 插件是经 Perry 编译的共享库，需包含 `activate(api)` 和 `deactivate()` 入口点
+2. 宿主应用通过 `loadPlugin(path)` 加载插件
 3. 插件通过 API 句柄注册钩子、工具和服务
-4. 主机通过 `emitHook(name, data)` 向插件分派事件
+4. 宿主应用通过 `emitHook(name, data)` 向插件分发事件
 
 ```
-主机应用程序
+Host Application
     ↓ loadPlugin("./my-plugin.dylib")
-    ↓ 调用 plugin_activate(api_handle)
-插件
+    ↓ calls plugin_activate(api_handle)
+Plugin
     ↓ api.registerHook("beforeSave", callback)
     ↓ api.registerTool("format", callback)
-主机
-    ↓ emitHook("beforeSave", data) → 插件回调运行
+Host
+    ↓ emitHook("beforeSave", data) → plugin callback runs
 ```
 
 ## 快速示例
 
-### 插件（使用 `--output-type dylib` 编译）
+### 插件（编译时需指定 `--output-type dylib`）
 
 ```typescript
 // my-plugin.ts
@@ -31,7 +31,7 @@ export function activate(api: PluginAPI) {
 
   api.registerHook("beforeSave", (data) => {
     console.log("About to save:", data);
-    return data; // 返回修改的数据（过滤模式）
+    return data; // Return modified data (filter mode)
   });
 
   api.registerTool("greet", (args) => {
@@ -48,43 +48,43 @@ export function deactivate() {
 perry my-plugin.ts --output-type dylib -o my-plugin.dylib
 ```
 
-### 主机应用程序
+### 宿主应用
 
 ```typescript
 import { loadPlugin, emitHook, invokeTool, listPlugins } from "perry/plugin";
 
 loadPlugin("./my-plugin.dylib");
 
-// 列出加载的插件
+// List loaded plugins
 const plugins = listPlugins();
 console.log(plugins); // [{ name: "my-plugin", version: "1.0.0", ... }]
 
-// 发出钩子
+// Emit a hook
 const result = emitHook("beforeSave", { content: "..." });
 
-// 调用工具
+// Invoke a tool
 const greeting = invokeTool("greet", { name: "Perry" });
 console.log(greeting); // "Hello, Perry!"
 ```
 
 ## 插件 ABI
 
-插件必须导出这些符号：
-- `perry_plugin_abi_version()` — 返回 ABI 版本（用于兼容性检查）
+插件必须导出以下符号：
+- `perry_plugin_abi_version()` — 返回 ABI 版本（用于兼容性校验）
 - `plugin_activate(api_handle)` — 插件加载时调用
 - `plugin_deactivate()` — 插件卸载时调用
 
-Perry 从您的 `activate`/`deactivate` 导出自动生成这些。
+Perry 会自动从你的 `activate`/`deactivate` 导出内容生成上述符号。
 
 ## 原生扩展
 
-Perry 还支持 **原生扩展**——包将平台特定 Rust/Swift/JNI 代码捆绑并直接编译到您的二进制文件中。这些用于访问平台 API，如 App Store 审核提示或 StoreKit 应用内购买。
+Perry 同时支持**原生扩展**——这类包捆绑了特定平台的 Rust/Swift/JNI 代码，并可直接编译到你的二进制文件中。原生扩展用于访问平台级 API，例如 App Store 评分提示或 StoreKit 应用内购功能。
 
-有关详细信息，请参阅 [Native Extensions](native-extensions.md)。
+详见 [原生扩展](native-extensions)。
 
-## Next Steps
+## 后续参考
 
-- [Creating Plugins](creating-plugins.md) — 逐步构建插件
-- [Hooks & Events](hooks-and-events.md) — 钩子模式、事件总线、工具
-- [Native Extensions](native-extensions.md) — 具有平台原生代码的扩展
-- [App Store Review](appstore-review.md) — 原生审核提示 (iOS/Android)
+- [Creating Plugins](creating-plugins) — 分步构建插件
+- [Hooks & Events](hooks-and-events) — 钩子模式、事件总线、工具
+- [Native Extensions](native-extensions) — 基于平台原生代码的扩展
+- [App Store Review](appstore-review) — 评分提示（iOS/Android）

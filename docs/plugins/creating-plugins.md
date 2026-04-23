@@ -1,8 +1,8 @@
-# 创建插件
+# 开发插件
 
-将 Perry 插件构建为共享库，以扩展主机应用程序。
+将 Perry 插件构建为可扩展宿主应用程序的共享库。
 
-## 第 1 步：编写插件
+## 步骤 1：编写插件
 
 ```typescript
 // counter-plugin.ts
@@ -27,30 +27,30 @@ export function deactivate() {
 }
 ```
 
-## 第 2 步：编译为共享库
+## 步骤 2：编译为共享库
 
 ```bash
 perry counter-plugin.ts --output-type dylib -o counter-plugin.dylib
 ```
 
-`--output-type dylib` 标志告诉 Perry 生成 `.dylib` (macOS) 或 `.so` (Linux) 而不是可执行文件。
+`--output-type dylib` 标志用于告知 Perry 生成 `.dylib`（macOS 系统）或 `.so`（Linux 系统）文件，而非可执行文件。
 
-Perry 自动：
-- 生成返回当前 ABI 版本的 `perry_plugin_abi_version()`
-- 生成调用您的 `activate()` 函数的 `plugin_activate(api_handle)`
-- 生成调用您的 `deactivate()` 函数的 `plugin_deactivate()`
-- 使用 `-rdynamic` 导出符号以供主机查找
+Perry 会自动完成以下操作：
+- 生成 `perry_plugin_abi_version()` 函数，返回当前 ABI 版本
+- 生成 `plugin_activate(api_handle)` 函数，调用自定义的 `activate()` 函数
+- 生成 `plugin_deactivate()` 函数，调用自定义的 `deactivate()` 函数
+- 通过 `-rdynamic` 导出符号，供宿主程序查找
 
-## 第 3 步：从主机加载
+## 步骤 3：从宿主程序加载插件
 
 ```typescript
 // host-app.ts
 import { loadPlugin, emitHook, invokeTool, discoverPlugins } from "perry/plugin";
 
-// 加载特定插件
+// 加载指定插件
 loadPlugin("./counter-plugin.dylib");
 
-// 或发现目录中的插件
+// 或发现指定目录下的所有插件
 discoverPlugins("./plugins/");
 
 // 使用插件
@@ -61,7 +61,7 @@ console.log(`Processed ${count} requests`);
 
 ## 插件 API 参考
 
-传递给 `activate()` 的 `api` 对象提供：
+传递至 `activate()` 函数的 `api` 对象提供以下能力：
 
 ### 元数据
 
@@ -75,7 +75,7 @@ api.setMetadata(name: string, version: string, description: string)
 api.registerHook(name: string, callback: (data: any) => any, priority?: number)
 ```
 
-钩子按优先级顺序调用（较低数字 = 先调用）。
+钩子函数会按优先级顺序执行（数值越小，执行优先级越高）。
 
 ### 工具
 
@@ -83,22 +83,22 @@ api.registerHook(name: string, callback: (data: any) => any, priority?: number)
 api.registerTool(name: string, callback: (args: any) => any)
 ```
 
-工具由主机按名称调用。
+宿主程序可通过名称调用工具函数。
 
 ### 配置
 
 ```typescript
-const value = api.getConfig(key: string)  // 读取主机提供的配置
+const value = api.getConfig(key: string)  // 读取宿主程序提供的配置项
 ```
 
 ### 事件
 
 ```typescript
 api.on(event: string, handler: (data: any) => void)  // 监听事件
-api.emit(event: string, data: any)                     // 向其他插件发出
+api.emit(event: string, data: any)                     // 向其他插件发送事件
 ```
 
-## Next Steps
+## 后续参考
 
-- [Hooks & Events](hooks-and-events.md) — 钩子模式、事件总线
-- [Overview](overview.md) — 插件系统概述
+- [Hooks & Events](hooks-and-events) — 钩子模式、事件总线
+- [插件系统概述](overview) — 插件系统总览

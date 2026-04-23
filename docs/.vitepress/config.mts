@@ -112,18 +112,18 @@ export default defineConfig({
         items: [
           { text: '系统 API 概述', link: '/system/overview.html' },
           { text: 'Preferences(偏好设置)', link: '/system/preferences.html' },
-          { text: 'Keychain(钥匙串)', link: '/system/keychain.html' },
+          { text: 'Keychain(安全存储)', link: '/system/keychain.html' },
           { text: 'Notifications(通知)', link: '/system/notifications.html' },
-          { text: 'Audio Capture(音频捕获)', link: '/system/audio.html' },
+          { text: 'Audio Capture(音频采集)', link: '/system/audio.html' },
           { text: 'Other(其他系统 API)', link: '/system/other.html' },
         ]
       },
       {
-        text: '控件',
+        text: '小组件',
         items: [
-          { text: '控件概述', link: '/widgets/overview.html' },
-          { text: 'Creating Widgets(创建控件)', link: '/widgets/creating-widgets.html' },
-          { text: 'Components & Modifiers(控件组件和修饰符)', link: '/widgets/components.html' },
+          { text: '小组件概述', link: '/widgets/overview.html' },
+          { text: 'Creating Widgets(创建小组件)', link: '/widgets/creating-widgets.html' },
+          { text: 'Components & Modifiers(小组件和修饰符)', link: '/widgets/components.html' },
           { text: 'Configuration(配置)', link: '/widgets/configuration.html' },
           { text: 'Data Fetching(数据获取)', link: '/widgets/data-fetching.html' },
           { text: 'Cross-Platform Reference(跨平台参考)', link: '/widgets/platforms.html' },
@@ -138,7 +138,7 @@ export default defineConfig({
           { text: 'Creating Plugins(创建插件)', link: '/plugins/creating-plugins.html' },
           { text: 'Hooks & Events(钩子 & 事件)', link: '/plugins/hooks-and-events.html' },
           { text: 'Native Extensions(原生扩展)', link: '/plugins/native-extensions.html' },
-          { text: 'App Store Review(App Store 审核)', link: '/plugins/appstore-review.html' },
+          { text: 'App Store Review(评分请求)', link: '/plugins/appstore-review.html' },
         ]
       },
       {
